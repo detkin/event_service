@@ -36,6 +36,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'event_service',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -48,6 +50,12 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+REST_FRAMEWORK = {
+    'PAGINATE_BY': 10,                 # Default to 10
+    'PAGINATE_BY_PARAM': 'page_size',  # Allow client to override, using `?page_size=xxx`.
+    'MAX_PAGINATE_BY': 100             # Maximum limit allowed when using `?page_size=xxx`.
+}
+
 ROOT_URLCONF = 'event_service.urls'
 
 WSGI_APPLICATION = 'event_service.wsgi.application'
@@ -58,8 +66,11 @@ WSGI_APPLICATION = 'event_service.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'HOST': '',
+        'NAME': 'event_service',
+        'PASSWORD': '',
+        'USER': 'detkin'
     }
 }
 

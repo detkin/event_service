@@ -1,10 +1,14 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
+from event_service.views import EventsList, EventByHost
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'event_service.views.home', name='home'),
-    # url(r'^blog/', include('blog.urls')),
 
-    url(r'^admin/', include(admin.site.urls)),
+   url(r'^api/v1.0/(?P<org>[^/]+)/events/?$',
+       EventsList.as_view(), name='events'),
+   url(r'^api/v1.0/(?P<org>[^/]+)/events/(?P<host_id>[^/]+)/?$',
+       EventByHost.as_view(), name='events_by_host'),
+
+
+   url(r'^admin/', include(admin.site.urls)),
 )
