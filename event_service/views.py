@@ -1,34 +1,35 @@
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from event_service.models import Event, Organization
+from event_service.serializers import EventSerializer
 
-events = {
-    'event1': 1,
-    'event2': 2,
-    'event3': 3,
-    'event4': 4,
-    'event5': 5,
-    'event6': 6,
-    'event7': 7,
-    'event8': 8,
-    'event9': 9,
-    'event10': 10,
-    'event11': 11,
-
-}
 
 class EventsList(APIView):
 
     def get(self, request, *args, **kwargs):
-        print kwargs['org']
-        print request.GET['host_id']
+        org_name = kwargs.get('org', None)
+        if not org_name or not Organization.objects.filter(name=org_name).exists():
+            return Response('Org not found',
+                            status=status.HTTP_404_NOT_FOUND)
 
-        return Response(events, status=status.HTTP_200_OK)
+        # Setup the base query, filter by org and always have desc created
+        # sorting
+        org = Organization.objects.get(name=org_name)
+        query = Event.objects.filter(org=org).order_by('-created_on')
 
-class EventByHost(APIView):
+        # filter by hostname if it has been provided
+        if 'hostname' in request.GET:
+            query = query.filter(hostname=request.GET['hostname'])
 
-    def get(self, request, *args, **kwargs):
-        print kwargs['org']
-        print kwargs['host_id']
+        # filter by page size if it has been provided, default to 100
+        page_size = 100
+        if 'page_size' in request.GET:
+            try:
+                page_size = int(request.GET['page_size'])
+            except ValueError:
+                # TODO: report this error?
+                pass
 
-        return Response(events, status=status.HTTP_200_OK)
+        serializer = EventSerializer(query[0:page_size], many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

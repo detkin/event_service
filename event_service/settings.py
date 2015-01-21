@@ -50,11 +50,6 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-REST_FRAMEWORK = {
-    'PAGINATE_BY': 10,                 # Default to 10
-    'PAGINATE_BY_PARAM': 'page_size',  # Allow client to override, using `?page_size=xxx`.
-    'MAX_PAGINATE_BY': 100             # Maximum limit allowed when using `?page_size=xxx`.
-}
 
 ROOT_URLCONF = 'event_service.urls'
 
