@@ -3,3 +3,4 @@ psycopg2==2.5.4
 djangorestframework==3.0.3
 django-filter==0.9.1
 markdown==2.5.2
+python-dateutil==2.4.0
