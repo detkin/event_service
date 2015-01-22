@@ -21,8 +21,8 @@ class Event(models.Model):
     hostname = models.CharField(max_length=255,
                                 verbose_name=_(u'hostname'),
                                 db_index=True)
-    string = models.URLField(max_length=255,
-                             verbose_name=_(u'string'))
+    string = models.CharField(max_length=255,
+                              verbose_name=_(u'string'))
 
     created_on = models.DateTimeField(verbose_name=_(u'created on'),
                                       db_index=True)
